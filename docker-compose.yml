@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  server1:
+    image: registry.k8s.io/serve_hostname
+    expose:
+      - "9376"
+    networks:
+      - reverse-proxy-network
+
+  server2:
+    image: registry.k8s.io/serve_hostname
+    expose:
+      - "9376"
+    networks:
+      - reverse-proxy-network
+
+  server3:
+    image: registry.k8s.io/serve_hostname
+    expose:
+      - "9376"
+    networks:
+      - reverse-proxy-network
+
+  nginx-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server1
+      - server2
+      - server3
+    networks:
+      - reverse-proxy-network
+
+networks:
+  reverse-proxy-network:
+    driver: bridge

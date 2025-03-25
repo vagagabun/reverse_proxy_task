@@ -1,0 +1,15 @@
+---
+- name: Deploy infrastructure using Docker Compose
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Copy docker-compose.yml to the server
+      copy:
+        src: ./docker-compose.yml
+        dest: /home/ubuntu/docker-compose.yml
+
+    - name: Run Docker Compose to start containers
+      command:
+        cmd: docker-compose up -d
+        chdir: /home/ubuntu/
